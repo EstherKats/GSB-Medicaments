@@ -134,11 +134,12 @@ public class DatabaseHelper extends SQLiteOpenHelper {
         if (cursor.moveToFirst()) {
             do {
                 // Récupérer les valeurs de la ligne actuelle
-                int codeCIS = cursor.getInt(cursor.getColumnIndex("Code_CIS"));
-                String denominationMedicament = cursor.getString(cursor.getColumnIndex("Denomination_du_medicament"));
-                String formePharmaceutiqueMedicament = cursor.getString(cursor.getColumnIndex("Forme_pharmaceutique"));
-                String voiesAdminMedicament = cursor.getString(cursor.getColumnIndex("Voies_dadministration"));
-                String titulairesMedicament = cursor.getString(cursor.getColumnIndex("Titulaires"));
+                int codeCIS = cursor.getInt(cursor.getColumnIndexOrThrow("Code_CIS"));
+                String denominationMedicament = cursor.getString(cursor.getColumnIndexOrThrow("Denomination_du_medicament"));
+                String formePharmaceutiqueMedicament = cursor.getString(cursor.getColumnIndexOrThrow("Forme_pharmaceutique"));
+                String voiesAdminMedicament = cursor.getString(cursor.getColumnIndexOrThrow("Voies_dadministration"));
+                String titulairesMedicament = cursor.getString(cursor.getColumnIndexOrThrow("Titulaires"));
+                String statutAdmiMedicament = cursor.getString(cursor.getColumnIndexOrThrow("Statut_administratif_de_lAMM"));
 
                 // Créer un objet Medicament avec les valeurs récupérées
                 Medicament medicament = new Medicament();
@@ -147,6 +148,7 @@ public class DatabaseHelper extends SQLiteOpenHelper {
                 medicament.setFormePharmaceutique(formePharmaceutiqueMedicament);
                 medicament.setVoiesAdmin(voiesAdminMedicament);
                 medicament.setTitulaires(titulairesMedicament);
+                medicament.setStatut(statutAdmiMedicament);
 
                 // Ajouter l'objet Medicament à la liste
                 medicamentList.add(medicament);

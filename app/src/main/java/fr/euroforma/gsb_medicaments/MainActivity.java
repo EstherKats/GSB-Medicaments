@@ -115,7 +115,6 @@ public class MainActivity extends AppCompatActivity {
         String denominationSubstance = removeAccents(editTextDenominationSubstance.getText().toString().trim());
         String voiesAdmin = spinnerVoiesAdmin.getSelectedItem().toString();
 
-
         // TODO: Use dbHelper to fetch search results and update the ListView
         List<Medicament> searchResults = dbHelper.searchMedicaments(denomination, formePharmaceutique, titulaires, denominationSubstance, voiesAdmin);
 

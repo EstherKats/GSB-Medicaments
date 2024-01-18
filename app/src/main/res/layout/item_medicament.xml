@@ -36,5 +36,11 @@
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:text="Titulaires: " />
+    <TextView
+        android:id="@+id/tvStatut"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="Statut: " />
+
 
 </LinearLayout>
