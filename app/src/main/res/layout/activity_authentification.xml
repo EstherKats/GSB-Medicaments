@@ -1,0 +1,52 @@
+<?xml version="1.0" encoding="utf-8"?>
+<androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    tools:context=".Authentification">
+
+    <EditText
+        android:id="@+id/editTextPhone"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:ems="10"
+        android:inputType="phone"
+        tools:layout_editor_absoluteX="100dp"
+        tools:layout_editor_absoluteY="173dp" />
+
+    <TextView
+        android:id="@+id/textView"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:fontFamily="sans-serif"
+        android:text="Code visiteur"
+        android:textSize="20sp"
+        tools:layout_editor_absoluteX="136dp"
+        tools:layout_editor_absoluteY="124dp" />
+
+    <Button
+        android:id="@+id/button"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="OK"
+        tools:layout_editor_absoluteX="161dp"
+        tools:layout_editor_absoluteY="241dp" />
+
+    <FrameLayout
+        android:layout_width="409dp"
+        android:layout_height="440dp"
+        tools:layout_editor_absoluteX="1dp"
+        tools:layout_editor_absoluteY="290dp">
+
+        <Button
+            android:id="@+id/button2"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:insetRight="0dp"
+            android:text="Button"
+            tools:layout_editor_absoluteX="168dp"
+            tools:layout_editor_absoluteY="489dp" />
+    </FrameLayout>
+
+</androidx.constraintlayout.widget.ConstraintLayout>

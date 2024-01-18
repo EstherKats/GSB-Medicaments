@@ -24,6 +24,12 @@ public class DatabaseHelper extends SQLiteOpenHelper {
     private static final String DATABASE_NAME = "medicaments.db";
     private static final int DATABASE_VERSION = 1;
     private String DATABASE_PATH;
+
+
+
+
+
+    private static final String PREMIERE_VOIE = "Selectionner une voies d'administration";
     private static DatabaseHelper sInstance;
 
     public static synchronized DatabaseHelper getInstance(Context context) {
@@ -66,8 +72,8 @@ public class DatabaseHelper extends SQLiteOpenHelper {
         List<String> voiesAdminList = new ArrayList<>();
 
         SQLiteDatabase db = this.getReadableDatabase();
-        Cursor cursor = db.rawQuery("SELECT DISTINCT Voies_dadministration FROM CIS_bdpm WHERE Voies_dadministration NOT LIKE '%;%'", null);
-
+        Cursor cursor = db.rawQuery("SELECT DISTINCT Voies_dadministration FROM CIS_bdpm WHERE Voies_dadministration NOT LIKE '%;%' ORDER BY Voies_dadministration", null);
+        voiesAdminList.add(PREMIERE_VOIE);
         if (cursor.moveToFirst()) {
             do {
 
@@ -91,21 +97,39 @@ public class DatabaseHelper extends SQLiteOpenHelper {
     public List<Medicament> searchMedicaments(String denomination, String formePharmaceutique, String titulaires, String denominationSubstance, String voiesAdmin)
         {
         List<Medicament> medicamentList = new ArrayList<>();
+        ArrayList<String> selectionArgs = new ArrayList<>();
+        selectionArgs.add("%" + denomination + "%");
+        selectionArgs.add("%" + formePharmaceutique + "%");
+        selectionArgs.add("%" + titulaires + "%");
+        selectionArgs.add("%" + denominationSubstance + "%");
+
+
 
         SQLiteDatabase db = this.getReadableDatabase();
+        String finSQL= "";
+        if (!voiesAdmin.equals(PREMIERE_VOIE)){
+            finSQL="AND Voies_dadministration = ? ";
+            selectionArgs.add(voiesAdmin);
+        }
 
-        // La requête SQL de recherche
-        String query = "SELECT * FROM CIS_bdpm WHERE " +
-                "Denomination_du_medicament LIKE ? AND " +
-                "Forme_pharmaceutique LIKE ? AND " +
-                "Titulaires LIKE ? AND " +
-                "Code_CIS IN (SELECT Code_CIS FROM CIS_COMPO_bdpm WHERE Designation_element LIKE ?) AND " +
-                "Voies_dadministration = ?";
+            String SQLSubstance = "SELECT CODE_CIS FROM CIS_COMPO_bdpm WHERE replace(replace(replace(replace(replace(replace(replace(replace(replace(replace(replace(upper(Denomination_substance), 'Â','A'),'Ä','A'),'À','A'),'É','E'),'Á','A'),'Ï','I'), 'Ê','E'),'È','E'),'Ô','O'),'Ü','U'), 'Ç','C' ) LIKE ?" ;
+            //String SQLSubstance = "SELECT CODE_CIS FROM CIS_COMPO_bdpm WHERE Denomination_substance COLLATE latin1_general_cs_ai LIKE ?" ;
 
-        // Les valeurs à remplacer dans la requête
-        String[] selectionArgs = {"%" + denomination + "%", "%" + formePharmaceutique + "%", "%" + titulaires + "%", "%" + denominationSubstance + "%", voiesAdmin};
+            // La requête SQL de recherche
+            String query = "SELECT * FROM CIS_bdpm WHERE " +
+                    "Denomination_du_medicament LIKE ? AND " +
+                    "Forme_pharmaceutique LIKE ? AND " +
+                    "Titulaires LIKE ? AND " +
+                    "Code_CIS IN (" +SQLSubstance+ ")" +
+                    finSQL;
 
-        Cursor cursor = db.rawQuery(query, selectionArgs);
+            // Les valeurs à remplacer dans la requête
+   ;
+
+
+
+        Cursor cursor = db.rawQuery(query, selectionArgs.toArray(new String[0]));
+        Log.d("SQL", "searchMedicaments: ");
 
         if (cursor.moveToFirst()) {
             do {
@@ -127,6 +151,9 @@ public class DatabaseHelper extends SQLiteOpenHelper {
                 // Ajouter l'objet Medicament à la liste
                 medicamentList.add(medicament);
             } while (cursor.moveToNext());
+        } else {
+            Toast toast = Toast.makeText(mycontext,"aucun resultat", Toast.LENGTH_LONG);
+            toast.show();
         }
 
         cursor.close();
@@ -134,6 +161,8 @@ public class DatabaseHelper extends SQLiteOpenHelper {
 
         return medicamentList;
     }
+
+
 
     private void copydatabase() {
 

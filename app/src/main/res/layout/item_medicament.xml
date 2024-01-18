@@ -9,13 +9,15 @@
         android:id="@+id/tvCodeCIS"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:text="Code_CIS: " />
+        android:text="Code_CIS: "
+        android:textStyle="bold"/>
 
     <TextView
         android:id="@+id/tvDenomination"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:text="Denomination: " />
+        android:text="Denomination: "
+        android:textStyle="bold"/>
 
     <TextView
         android:id="@+id/tvFormePharmaceutique"
