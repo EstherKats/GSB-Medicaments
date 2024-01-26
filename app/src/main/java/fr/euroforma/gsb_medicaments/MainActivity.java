@@ -1,6 +1,11 @@
 package fr.euroforma.gsb_medicaments;
+
+
 import android.content.Context;
+import android.content.Intent;
+import android.content.SharedPreferences;
 import android.os.Bundle;
+import android.preference.PreferenceManager;
 import android.view.View;
 import android.view.inputmethod.InputMethodManager;
 import android.widget.AdapterView;
@@ -22,8 +27,17 @@ public class MainActivity extends AppCompatActivity {
     private Button btnSearch;
     private ListView listViewResults;
     private DatabaseHelper dbHelper;
+    private static final String KEY_USER_STATUS = "userStatus";
+    private static final String PREF_NAME = "UserPrefs";
 
+    private boolean isUserAuthenticated() {
+        SharedPreferences sharedPreferences = getSharedPreferences(PREF_NAME, MODE_PRIVATE);
+        PreferenceManager.getDefaultSharedPreferences(this);
+        String userStatus = sharedPreferences.getString(KEY_USER_STATUS, "authentitfié");
 
+        // Vérifiez si la chaîne d'état de l'utilisateur est "Authentifie=OK"
+        return "Authentifié".equals(userStatus);
+    }
 
     // Les valeurs à remplacer dans la requête
 
@@ -45,8 +59,15 @@ public class MainActivity extends AppCompatActivity {
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        setContentView(R.layout.activity_main);
-
+        if (!isUserAuthenticated()) {
+            // L'utilisateur n'est pas authentifié, redirigez vers l'activité d'authentification
+            Intent authIntent = new Intent(this, Authentification.class);
+            startActivity(authIntent);
+            finish(); // Terminez l'activité principale pour éviter qu'elle ne soit accessible avec le bouton "Retour"
+        }
+        // L'utilisateur est authentifié, continuez avec le chargement de l'activité principale
+            setContentView(R.layout.activity_main);
+            // Ajoutez le reste de votre code d'initialisation ici
         // Initialize UI components
         editTextDenomination = findViewById(R.id.editTextDenomination);
         editTextFormePharmaceutique = findViewById(R.id.editTextFormePharmaceutique);
