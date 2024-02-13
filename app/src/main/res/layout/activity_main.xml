@@ -7,6 +7,7 @@
     android:padding="16dp"
     tools:context=".MainActivity">
 
+
     <!-- EditText for entering Denomination_du_medicament -->
     <EditText
         android:id="@+id/editTextDenomination"
@@ -55,5 +56,28 @@
         android:layout_width="match_parent"
         android:layout_height="0dp"
         android:layout_weight="1"/>
+
+    <LinearLayout
+        android:id="@+id/buton"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_gravity="center"
+        android:orientation="horizontal">
+
+        <Button
+            android:id="@+id/deconnexion"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="Deconnexion"
+            android:onClick="clickDeconnexion"/>
+
+        <Button
+            android:id="@+id/quitter"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="Quitter"
+            android:onClick="clickQuitter"/>
+
+    </LinearLayout>
 
 </LinearLayout>

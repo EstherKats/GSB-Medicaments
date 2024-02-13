@@ -94,7 +94,8 @@ public class DatabaseHelper extends SQLiteOpenHelper {
 
             return dbfile.exists();
         }
-    public List<Medicament> searchMedicaments(String denomination, String formePharmaceutique, String titulaires, String denominationSubstance, String voiesAdmin)
+    public List<Medicament> searchMedicaments(String denomination, String formePharmaceutique, String titulaires, String denominationSubstance, String voiesAdmin
+    )
         {
         List<Medicament> medicamentList = new ArrayList<>();
         ArrayList<String> selectionArgs = new ArrayList<>();

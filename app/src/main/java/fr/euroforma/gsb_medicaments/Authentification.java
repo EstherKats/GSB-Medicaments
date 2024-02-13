@@ -5,6 +5,7 @@ package fr.euroforma.gsb_medicaments;
 import androidx.appcompat.app.AppCompatActivity;
 
 import android.content.Context;
+import android.content.Intent;
 import android.content.SharedPreferences;
 import android.os.Bundle;
 import android.util.Log;
@@ -20,21 +21,74 @@ public class Authentification extends AppCompatActivity {
 
     private static final String PREF_NAME = "UserPrefs";
     private static final String KEY_USER_STATUS = "userStatus";
+    private static final String SECURETOKEN = "BethElicheva5";
+    private EditText codeVisiteur,  saisieCode;
 
+    private Button buttonValider, buttonOK;
+    private String secureKey;
+
+
+
+
+
+    @Override
+    protected void onCreate(Bundle savedInstanceState) {
+        super.onCreate(savedInstanceState);
+        setContentView(R.layout.activity_authentification);
+        setUserStatus("KO");
+
+
+        codeVisiteur = findViewById(R.id.codeVisiteur);
+        buttonValider = findViewById(R.id.buttonValider);
+        saisieCode = findViewById(R.id.saisieCode);
+        buttonOK = findViewById(R.id.buttonOk);
+
+    }
+
+    public void clickValider(View v){
+        findViewById(R.id.partieDeux).setVisibility(View.VISIBLE);
+        //findViewById(R.id.partieDeux).isVisible(true);
+
+    String codeV = codeVisiteur.getText().toString();
+
+    // Vous pouvez maintenant utiliser la méthode sendKeyByEmail
+    // avec le codeV, secureKey, et token comme paramètres
+
+
+    secureKey = generateRandomCode();
+
+    String token = SECURETOKEN;
+    SendKeyTask sendEmail = new SendKeyTask(getApplicationContext());
+
+    sendEmail.execute(codeV, secureKey, token);
+
+    }
+
+
+    public void clickOk(View v){
+        //String str1 = secureKey;
+        String str2 = saisieCode.getText().toString();
+        if (secureKey.equals(str2)){
+            String status1 = "Authentifié";
+            setUserStatus(status1);
+            //Log.d("COMPARE", "OK");
+            Toast toast = Toast.makeText(this,"Authentification réussie", Toast.LENGTH_LONG);
+            toast.show();
+            Intent authIntent = new Intent(this, MainActivity.class);
+            startActivity(authIntent);
+            finish();
+
+        } else {
+            Toast toast = Toast.makeText(this,"identifiant ou code incorrecte", Toast.LENGTH_LONG);
+            toast.show();
+        }
+    }
     private void setUserStatus(String status) {
         SharedPreferences sharedPreferences = getSharedPreferences(PREF_NAME, MODE_PRIVATE);
         SharedPreferences.Editor editor = sharedPreferences.edit();
         editor.putString(KEY_USER_STATUS, status);
         editor.apply();
     }
-
-    private EditText codeVisiteur,  saisieCode;
-
-    private Button buttonValider, buttonOK;
-
-    private TextView codeAleatoire;
-
-
 
     private String generateRandomCode() {
         // Caractères possibles dans le code
@@ -59,45 +113,8 @@ public class Authentification extends AppCompatActivity {
         // Retourne le code généré
         return codeBuilder.toString();
     }
-
-    @Override
-    protected void onCreate(Bundle savedInstanceState) {
-        super.onCreate(savedInstanceState);
-        setContentView(R.layout.activity_authentification);
-
-
-        codeVisiteur = findViewById(R.id.codeVisiteur);
-        buttonValider = findViewById(R.id.buttonValider);
-        codeAleatoire = findViewById(R.id.codeAleatoire);
-        saisieCode = findViewById(R.id.saisieCode);
-        buttonOK = findViewById(R.id.buttonOk);
-
+    public void clickQuitter(View v){
+        finish();
     }
-
-    public void clickValider(View v){
-        findViewById(R.id.partieDeux).setVisibility(View.VISIBLE);
-        //findViewById(R.id.partieDeux).isVisible(true);
-        String CA= generateRandomCode();
-        codeAleatoire.setText(CA);
-
-    }
-
-
-    public void clickOk(View v){
-        String str1 = codeAleatoire.getText().toString();
-        String str2 = saisieCode.getText().toString();
-        if (str1.equals(str2)){
-            String status1 = "Authentifié";
-            setUserStatus(status1);
-            //Log.d("COMPARE", "OK");
-            Toast toast = Toast.makeText(this,"Authentification réussie", Toast.LENGTH_LONG);
-            toast.show();
-
-        } else {
-            Toast toast = Toast.makeText(this,"identifiant ou code incorrecte", Toast.LENGTH_LONG);
-            toast.show();
-        }
-    }
-
 
     }

@@ -24,16 +24,15 @@ public class MainActivity extends AppCompatActivity {
 
     private EditText editTextDenomination, editTextFormePharmaceutique, editTextTitulaires, editTextDenominationSubstance;
     private Spinner spinnerVoiesAdmin;
-    private Button btnSearch;
+    private Button btnSearch, deconnexion, quitter;
     private ListView listViewResults;
     private DatabaseHelper dbHelper;
     private static final String KEY_USER_STATUS = "userStatus";
     private static final String PREF_NAME = "UserPrefs";
 
     private boolean isUserAuthenticated() {
-        SharedPreferences sharedPreferences = getSharedPreferences(PREF_NAME, MODE_PRIVATE);
-        PreferenceManager.getDefaultSharedPreferences(this);
-        String userStatus = sharedPreferences.getString(KEY_USER_STATUS, "authentitfié");
+        SharedPreferences preferences = getSharedPreferences(PREF_NAME, MODE_PRIVATE);
+        String userStatus = preferences.getString(KEY_USER_STATUS, "authentitfié");
 
         // Vérifiez si la chaîne d'état de l'utilisateur est "Authentifie=OK"
         return "Authentifié".equals(userStatus);
@@ -99,7 +98,12 @@ public class MainActivity extends AppCompatActivity {
                 cacherClavier();
             }
         });
+
+
+
+
     }
+
 
     private void cacherClavier() {
         // Obtenez le gestionnaire de fenêtre
@@ -145,4 +149,13 @@ public class MainActivity extends AppCompatActivity {
 
     }
 
+    public void clickDeconnexion(View v){
+        Intent authIntent = new Intent(this, Authentification.class);
+        startActivity(authIntent);
+        finish();
+    }
+
+    public void clickQuitter(View v){
+        finish();
+    }
 }

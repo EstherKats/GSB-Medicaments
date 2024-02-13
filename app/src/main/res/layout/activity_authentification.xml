@@ -38,13 +38,6 @@
         tools:layout_editor_absoluteX="1dp"
         tools:layout_editor_absoluteY="437dp">
 
-        <TextView
-            android:id="@+id/codeAleatoire"
-            android:layout_width="212dp"
-            android:layout_height="wrap_content"
-            android:layout_marginStart="100dp"
-            android:ems="10"
-            android:text="TextView" />
 
         <EditText
             android:id="@+id/saisieCode"
@@ -64,5 +57,13 @@
 
 
     </LinearLayout>
+
+    <Button
+        android:id="@+id/quitter"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="Quitter"
+        android:onClick="clickQuitter"
+        android:layout_gravity="center"/>
 
 </LinearLayout>
