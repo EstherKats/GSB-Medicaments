@@ -117,7 +117,7 @@ public class DatabaseHelper extends SQLiteOpenHelper {
             //String SQLSubstance = "SELECT CODE_CIS FROM CIS_COMPO_bdpm WHERE Denomination_substance COLLATE latin1_general_cs_ai LIKE ?" ;
 
             // La requête SQL de recherche
-            String query = "SELECT * FROM CIS_bdpm WHERE " +
+            String query = "SELECT *, (select count(*) from CIS_COMPO_bdpm c where c.Code_CIS=m.Code_CIS) as nb_molecules FROM CIS_bdpm m WHERE " +
                     "Denomination_du_medicament LIKE ? AND " +
                     "Forme_pharmaceutique LIKE ? AND " +
                     "Titulaires LIKE ? AND " +
@@ -141,6 +141,7 @@ public class DatabaseHelper extends SQLiteOpenHelper {
                 String voiesAdminMedicament = cursor.getString(cursor.getColumnIndexOrThrow("Voies_dadministration"));
                 String titulairesMedicament = cursor.getString(cursor.getColumnIndexOrThrow("Titulaires"));
                 String statutAdmiMedicament = cursor.getString(cursor.getColumnIndexOrThrow("Statut_administratif_de_lAMM"));
+                String CountMolecules = cursor.getString(cursor.getColumnIndexOrThrow("nb_molecules"));
 
                 // Créer un objet Medicament avec les valeurs récupérées
                 Medicament medicament = new Medicament();
@@ -150,6 +151,7 @@ public class DatabaseHelper extends SQLiteOpenHelper {
                 medicament.setVoiesAdmin(voiesAdminMedicament);
                 medicament.setTitulaires(titulairesMedicament);
                 medicament.setStatut(statutAdmiMedicament);
+                medicament.setNb_molecules(CountMolecules.toString());
 
                 // Ajouter l'objet Medicament à la liste
                 medicamentList.add(medicament);
@@ -163,6 +165,27 @@ public class DatabaseHelper extends SQLiteOpenHelper {
         db.close();
 
         return medicamentList;
+    }
+
+    public List<String> getCompositionMedicament(int codeCIS) {
+        List<String> compositionList = new ArrayList<>();
+
+        SQLiteDatabase db = this.getReadableDatabase();
+        Cursor cursor = db.rawQuery("SELECT * FROM CIS_compo_bdpm WHERE Code_CIS = ?", new String[]{String.valueOf(codeCIS)});
+        int i = 0;
+        if (cursor.moveToFirst()) {
+            do {
+                i++;
+                String substance = cursor.getString(cursor.getColumnIndex("Denomination_substance"));
+                String dosage = cursor.getString(cursor.getColumnIndex("Dosage_substance"));
+                compositionList.add(i+ ".  " + substance + " - (" + dosage + ")");
+            } while (cursor.moveToNext());
+        }
+
+        cursor.close();
+        db.close();
+
+        return compositionList;
     }
 
 
@@ -217,6 +240,8 @@ public class DatabaseHelper extends SQLiteOpenHelper {
         catch(SQLiteException e) {
             // bdd n'existe pas
         }
+
+
 
     }
 

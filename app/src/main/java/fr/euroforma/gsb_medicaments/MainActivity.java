@@ -1,11 +1,12 @@
 package fr.euroforma.gsb_medicaments;
 
 
+import android.app.AlertDialog;
 import android.content.Context;
+import android.content.DialogInterface;
 import android.content.Intent;
 import android.content.SharedPreferences;
 import android.os.Bundle;
-import android.preference.PreferenceManager;
 import android.view.View;
 import android.view.inputmethod.InputMethodManager;
 import android.widget.AdapterView;
@@ -29,30 +30,6 @@ public class MainActivity extends AppCompatActivity {
     private DatabaseHelper dbHelper;
     private static final String KEY_USER_STATUS = "userStatus";
     private static final String PREF_NAME = "UserPrefs";
-
-    private boolean isUserAuthenticated() {
-        SharedPreferences preferences = getSharedPreferences(PREF_NAME, MODE_PRIVATE);
-        String userStatus = preferences.getString(KEY_USER_STATUS, "authentitfié");
-
-        // Vérifiez si la chaîne d'état de l'utilisateur est "Authentifie=OK"
-        return "Authentifié".equals(userStatus);
-    }
-
-    // Les valeurs à remplacer dans la requête
-
-    private String removeAccents(String input) {
-        if (input == null) {
-            return null;
-        }
-
-        // Normalisation en forme de décomposition (NFD)
-        String normalized = Normalizer.normalize(input, Normalizer.Form.NFD);
-
-        // Remplacement des caractères diacritiques
-        Pattern pattern = Pattern.compile("\\p{InCombiningDiacriticalMarks}+");
-        return pattern.matcher(normalized).replaceAll("");
-    }
-
 
 
     @Override
@@ -99,6 +76,17 @@ public class MainActivity extends AppCompatActivity {
             }
         });
 
+        listViewResults.setOnItemClickListener(new AdapterView.OnItemClickListener() {
+            @Override
+            public void onItemClick(AdapterView<?> adapterView, View view, int position, long id) {
+
+                // Get the selected item
+                Medicament selectedMedicament = (Medicament) adapterView.getItemAtPosition(position);
+                // Show composition of the selected medicament
+                afficherCompositionMedicament(selectedMedicament);
+            }
+        });
+
 
 
 
@@ -118,6 +106,32 @@ public class MainActivity extends AppCompatActivity {
             imm.hideSoftInputFromWindow(vueCourante.getWindowToken(), 0);
         }
     }
+
+    private boolean isUserAuthenticated() {
+        SharedPreferences preferences = getSharedPreferences(PREF_NAME, MODE_PRIVATE);
+        String userStatus = preferences.getString(KEY_USER_STATUS, "authentitfié");
+
+        // Vérifiez si la chaîne d'état de l'utilisateur est "Authentifie=OK"
+        return "Authentifié".equals(userStatus);
+    }
+
+    // Les valeurs à remplacer dans la requête
+
+    private String removeAccents(String input) {
+        if (input == null) {
+            return null;
+        }
+
+        // Normalisation en forme de décomposition (NFD)
+        String normalized = Normalizer.normalize(input, Normalizer.Form.NFD);
+
+        // Remplacement des caractères diacritiques
+        Pattern pattern = Pattern.compile("\\p{InCombiningDiacriticalMarks}+");
+        return pattern.matcher(normalized).replaceAll("");
+    }
+
+
+
 
 
 
@@ -158,4 +172,29 @@ public class MainActivity extends AppCompatActivity {
     public void clickQuitter(View v){
         finish();
     }
+
+    private void afficherCompositionMedicament(Medicament medicament) {
+        List<String> composition = dbHelper.getCompositionMedicament(medicament.getCodeCIS());
+
+        // Afficher la composition du médicament dans une boîte de dialogue ou autre méthode d'affichage
+        AlertDialog.Builder builder = new AlertDialog.Builder(this);
+        builder.setTitle("Composition de " + medicament.getCodeCIS());
+        if (composition.isEmpty()) {
+            builder.setMessage("Aucune composition disponible pour ce médicament.");
+        } else {
+            StringBuilder compositionText = new StringBuilder();
+            for (String item : composition) {
+                compositionText.append(item).append("\n");
+            }
+            builder.setMessage(compositionText.toString());
+        }
+        builder.setPositiveButton("OK", new DialogInterface.OnClickListener() {
+            public void onClick(DialogInterface dialog, int which) {
+                dialog.dismiss();
+            }
+        });
+        AlertDialog dialog = builder.create();
+        dialog.show();
+    }
+
 }
