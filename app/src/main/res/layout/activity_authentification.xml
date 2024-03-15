@@ -44,6 +44,7 @@
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_marginStart="100dp"
+            android:hint="Code aléatoire"
             android:ems="10"
             android:inputType="text" />
 
@@ -62,8 +63,8 @@
         android:id="@+id/quitter"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:text="Quitter"
+        android:layout_gravity="center"
         android:onClick="clickQuitter"
-        android:layout_gravity="center"/>
+        android:text="Quitter" />
 
 </LinearLayout>
