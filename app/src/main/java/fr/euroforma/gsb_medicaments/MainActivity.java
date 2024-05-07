@@ -173,21 +173,39 @@ public class MainActivity extends AppCompatActivity {
         finish();
     }
 
-    private void afficherCompositionMedicament(Medicament medicament) {
-        List<String> composition = dbHelper.getCompositionMedicament(medicament.getCodeCIS());
 
-        // Afficher la composition du médicament dans une boîte de dialogue ou autre méthode d'affichage
-        AlertDialog.Builder builder = new AlertDialog.Builder(this);
-        builder.setTitle("Composition de " + medicament.getCodeCIS());
-        if (composition.isEmpty()) {
-            builder.setMessage("Aucune composition disponible pour ce médicament.");
-        } else {
-            StringBuilder compositionText = new StringBuilder();
-            for (String item : composition) {
-                compositionText.append(item).append("\n");
-            }
-            builder.setMessage(compositionText.toString());
-        }
+            private void afficherCompositionMedicament(Medicament medicament) {
+                List<String> composition = dbHelper.getCompositionMedicament(medicament.getCodeCIS());
+                List<String> presentation = dbHelper.getPresentationMedicament(medicament.getCodeCIS());
+
+                // Afficher la composition du médicament dans une boîte de dialogue ou autre méthode d'affichage
+                AlertDialog.Builder builder = new AlertDialog.Builder(this);
+                builder.setTitle("Composition de " + medicament.getCodeCIS());
+                StringBuilder compositionText = new StringBuilder();
+
+                if (composition.isEmpty()) {
+                    compositionText.append("aucune composition disponible pour ce médicament.").append("\n");
+                } else {
+
+                    for (String item : composition) {
+                        compositionText.append(item).append("\n");
+                    }
+
+
+                }
+                if (presentation.isEmpty()) {
+                    compositionText.append("aucune presentation disponible pour ce médicament.").append("\n");
+                } else {
+
+                    for (String item : presentation) {
+                        compositionText.append(item).append("\n");
+                    }
+
+
+                }
+                builder.setMessage(compositionText.toString());
+
+
         builder.setPositiveButton("OK", new DialogInterface.OnClickListener() {
             public void onClick(DialogInterface dialog, int which) {
                 dialog.dismiss();

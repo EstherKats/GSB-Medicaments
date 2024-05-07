@@ -10,6 +10,7 @@ public class Medicament {
     private String nb_molecules;
 
 
+
     // Constructeur
 
     // Getter et Setter pour codeCIS
@@ -68,6 +69,8 @@ public class Medicament {
     }
 
     public void setNb_molecules(String nb_molecules) {this.nb_molecules = nb_molecules; }
+
+
 }
 
 

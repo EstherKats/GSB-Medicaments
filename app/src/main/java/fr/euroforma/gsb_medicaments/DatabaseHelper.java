@@ -29,7 +29,7 @@ public class DatabaseHelper extends SQLiteOpenHelper {
 
 
 
-    private static final String PREMIERE_VOIE = "Selectionner une voies d'administration";
+    private static final String PREMIERE_VOIE = "Séléctionner une voie d'administration";
     private static DatabaseHelper sInstance;
 
     public static synchronized DatabaseHelper getInstance(Context context) {
@@ -186,6 +186,26 @@ public class DatabaseHelper extends SQLiteOpenHelper {
         db.close();
 
         return compositionList;
+    }
+
+    public List<String> getPresentationMedicament(int codeCIS) {
+        List<String> presentationList = new ArrayList<>();
+
+        SQLiteDatabase db = this.getReadableDatabase();
+        Cursor cursor = db.rawQuery("SELECT * FROM CIS_CIP_bdpm WHERE Code_CIS = ?", new String[]{String.valueOf(codeCIS)});
+        int i=0;
+        if (cursor.moveToFirst()) {
+            do {
+                i++;
+                String libellePresentation = cursor.getString(cursor.getColumnIndex("Libelle_presentation"));
+                presentationList.add(i+":"+libellePresentation);
+            } while (cursor.moveToNext());
+        }
+
+        cursor.close();
+        db.close();
+
+        return presentationList;
     }
 
 

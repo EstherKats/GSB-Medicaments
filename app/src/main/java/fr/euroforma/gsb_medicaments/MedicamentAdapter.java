@@ -10,6 +10,11 @@ import java.util.List;
 
 public class MedicamentAdapter extends ArrayAdapter<Medicament> {
 
+    private String molecule;
+    private int nb_molecules;
+
+
+
     public MedicamentAdapter(Context context, List<Medicament> medicaments) {
         super(context, 0, medicaments);
     }
@@ -23,6 +28,7 @@ public class MedicamentAdapter extends ArrayAdapter<Medicament> {
         if (convertView == null) {
             convertView = LayoutInflater.from(getContext()).inflate(R.layout.item_medicament, parent, false);
         }
+
 
         // Populate the data into the template view using the data object
         TextView tvCodeCIS = convertView.findViewById(R.id.tvCodeCIS);
@@ -39,11 +45,24 @@ public class MedicamentAdapter extends ArrayAdapter<Medicament> {
         tvVoiesAdmin.setText(medicament.getVoiesAdmin());
         tvTitulaires.setText(medicament.getTitulaires());
         tvStatut.setText(medicament.getStatut());
-        tvMolecule.setText("Molécules : " + medicament.getNb_molecules());
+        nb_molecules = Integer.parseInt(medicament.getNb_molecules());
+        tvMolecule.setText(medicament.getNb_molecules()+ molecule(nb_molecules));
 
 
         // Return the completed view to render on screen
         return convertView;
     }
+
+
+    public String molecule(int nb_molecules) {
+
+        if (nb_molecules == 1) {
+            molecule = " molécule";
+        } else {
+            molecule = " molécules";
+        }
+        return molecule;
+    }
+
 }
 
