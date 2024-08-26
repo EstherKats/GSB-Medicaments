@@ -5,58 +5,71 @@
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     android:orientation="vertical"
-    android:padding="16dp"
-    tools:context=".MainActivity">
+    android:padding="16dp">
 
     <ImageView
         android:id="@+id/imageView"
-        android:layout_width="match_parent"
+        android:layout_width="586dp"
         android:layout_height="128dp"
-        app:srcCompat="@drawable/logo"
-        />
+        android:layout_gravity="center"
+        app:srcCompat="@drawable/logo" />
 
 
+    <TextView
+        android:id="@+id/textViewNom2"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:paddingTop="20dp"/>
     <!-- EditText for entering Denomination_du_medicament -->
+
+    <!-- EditText for entering Forme_pharmaceutique -->
     <EditText
         android:id="@+id/editTextDenomination"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:hint="Denomination_du_medicament"/>
+        android:hint="Dénomination du médicament"
+        android:paddingTop="10dp"/>
 
-    <!-- EditText for entering Forme_pharmaceutique -->
     <EditText
         android:id="@+id/editTextFormePharmaceutique"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:hint="Forme_pharmaceutique"/>
+        android:hint="Forme pharmaceutique"
+        android:paddingTop="10dp"/>
 
     <!-- EditText for entering Titulaires -->
     <EditText
         android:id="@+id/editTextTitulaires"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:hint="Titulaires"/>
+        android:hint="Titulaire"
+        android:paddingTop="10dp"/>
 
     <!-- EditText for entering Denomination_substance -->
     <EditText
         android:id="@+id/editTextDenominationSubstance"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:hint="Denomination_substance"/>
+        android:hint="Dénomination substance"
+        android:paddingTop="10dp"/>
 
     <!-- Spinner for selecting Voies_dadministration -->
     <Spinner
         android:id="@+id/spinnerVoiesAdmin"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:hint="Voies_dadministration"/>
+        android:hint="Voies d'administration"
+        android:padding="10dp"/>
 
     <!-- Button to trigger the search -->
     <Button
         android:id="@+id/btnSearch"
         android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:text="Search"/>
+        android:layout_height="59dp"
+        android:backgroundTint="#7399c9"
+        android:onClick="search"
+        android:text="Search"
+        android:textSize="30dp" />
 
     <!-- ListView to display the search results -->
     <ListView
@@ -67,24 +80,53 @@
 
     <LinearLayout
         android:id="@+id/buton"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_gravity="center"
+        android:layout_width="match_parent"
+        android:layout_height="46dp"
+        android:layout_gravity="center_horizontal"
         android:orientation="horizontal">
+
+
+        <ImageButton
+            android:id="@+id/info"
+            android:layout_width="70dp"
+            android:layout_height="wrap_content"
+            android:layout_gravity="left"
+            android:backgroundTint="#7399c9"
+            android:onClick="info"
+            android:paddingVertical="30dp"
+            app:srcCompat="@android:drawable/ic_menu_info_details"
+            tools:srcCompat="@android:drawable/ic_dialog_info" />
 
         <Button
             android:id="@+id/deconnexion"
             android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
+            android:layout_height="match_parent"
+            android:backgroundTint="#7399c9"
+            android:gravity="center|center_horizontal"
+            android:onClick="clickDeconnexion"
             android:text="Deconnexion"
-            android:onClick="clickDeconnexion"/>
+            android:textSize="30px" />
 
         <Button
             android:id="@+id/quitter"
             android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
+            android:layout_height="match_parent"
+            android:backgroundTint="#7399c9"
+            android:gravity="center|center_horizontal"
+            android:onClick="clickQuitter"
             android:text="Quitter"
-            android:onClick="clickQuitter"/>
+            android:textSize="30px"
+            />
+
+        <Button
+            android:layout_width="wrap_content"
+            android:layout_height="match_parent"
+            android:backgroundTint="#7399c9"
+            android:onClick="GeneriquePage"
+            android:text="Générique"
+            android:textSize="30px"
+            />
+
 
     </LinearLayout>
 

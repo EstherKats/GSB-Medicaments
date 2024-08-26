@@ -15,6 +15,8 @@ import android.widget.Button;
 import android.widget.EditText;
 import android.widget.ListView;
 import android.widget.Spinner;
+import android.widget.TextView;
+
 import androidx.appcompat.app.AppCompatActivity;
 
 import java.text.Normalizer;
@@ -24,12 +26,15 @@ import java.util.regex.Pattern;
 public class MainActivity extends AppCompatActivity {
 
     private EditText editTextDenomination, editTextFormePharmaceutique, editTextTitulaires, editTextDenominationSubstance;
+    private TextView textViewNom;
     private Spinner spinnerVoiesAdmin;
     private Button btnSearch, deconnexion, quitter;
     private ListView listViewResults;
     private DatabaseHelper dbHelper;
     private static final String KEY_USER_STATUS = "userStatus";
     private static final String PREF_NAME = "UserPrefs";
+    private static final String NOM = "nom";
+    private static final String PRENOM = "prenom";
 
 
     @Override
@@ -43,7 +48,11 @@ public class MainActivity extends AppCompatActivity {
         }
         // L'utilisateur est authentifié, continuez avec le chargement de l'activité principale
             setContentView(R.layout.activity_main);
-            // Ajoutez le reste de votre code d'initialisation ici
+
+        textViewNom = findViewById(R.id.textViewNom2);
+        textViewNom.setText( PrenomUser() + " " + NomUser() );
+
+        // Ajoutez le reste de votre code d'initialisation ici
         // Initialize UI components
         editTextDenomination = findViewById(R.id.editTextDenomination);
         editTextFormePharmaceutique = findViewById(R.id.editTextFormePharmaceutique);
@@ -54,17 +63,11 @@ public class MainActivity extends AppCompatActivity {
         listViewResults = findViewById(R.id.listViewResults);
 
 
-
-
         // Initialize the database helper
         dbHelper = new DatabaseHelper(this);
 
-
-
         // Set up the spinner with Voies_dadministration data
         setupVoiesAdminSpinner();
-
-
 
         // Set up the click listener for the search button
         btnSearch.setOnClickListener(new View.OnClickListener() {
@@ -87,11 +90,7 @@ public class MainActivity extends AppCompatActivity {
             }
         });
 
-
-
-
     }
-
 
     private void cacherClavier() {
         // Obtenez le gestionnaire de fenêtre
@@ -115,6 +114,18 @@ public class MainActivity extends AppCompatActivity {
         return "Authentifié".equals(userStatus);
     }
 
+     public String NomUser() {
+         SharedPreferences preferences = getSharedPreferences(PREF_NAME, MODE_PRIVATE);
+         String userNom = preferences.getString(NOM, "");
+         return userNom;
+     }
+
+    public String PrenomUser() {
+        SharedPreferences preferences = getSharedPreferences(PREF_NAME, MODE_PRIVATE);
+        String userPrenom = preferences.getString(PRENOM, "");
+        return userPrenom;
+    }
+
     // Les valeurs à remplacer dans la requête
 
     private String removeAccents(String input) {
@@ -130,11 +141,6 @@ public class MainActivity extends AppCompatActivity {
         return pattern.matcher(normalized).replaceAll("");
     }
 
-
-
-
-
-
     private void setupVoiesAdminSpinner() {
         // Fetch distinct Voies_dadministration data from the database and populate the spinner
         List<String> voiesAdminList = dbHelper.getDistinctVoiesAdmin();
@@ -142,9 +148,6 @@ public class MainActivity extends AppCompatActivity {
         spinnerAdapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
         spinnerVoiesAdmin.setAdapter(spinnerAdapter);
     }
-
-
-
 
     private void performSearch() {
         // TODO: Implement the search logic using the entered criteria and update the ListView
@@ -174,32 +177,29 @@ public class MainActivity extends AppCompatActivity {
     }
 
 
-            private void afficherCompositionMedicament(Medicament medicament) {
-                List<String> composition = dbHelper.getCompositionMedicament(medicament.getCodeCIS());
-                List<String> presentation = dbHelper.getPresentationMedicament(medicament.getCodeCIS());
+    private void afficherCompositionMedicament(Medicament medicament) {
+        List<String> composition = dbHelper.getCompositionMedicament(medicament.getCodeCIS());
+        List<String> presentation = dbHelper.getPresentationMedicament(medicament.getCodeCIS());
 
-                // Afficher la composition du médicament dans une boîte de dialogue ou autre méthode d'affichage
-                AlertDialog.Builder builder = new AlertDialog.Builder(this);
-                builder.setTitle("Composition de " + medicament.getCodeCIS());
-                StringBuilder compositionText = new StringBuilder();
+        // Afficher la composition du médicament dans une boîte de dialogue ou autre méthode d'affichage
+        AlertDialog.Builder builder = new AlertDialog.Builder(this);
+        builder.setTitle("Composition de " + medicament.getCodeCIS());
+        StringBuilder compositionText = new StringBuilder();
+        if (composition.isEmpty()) {
+            compositionText.append("\n").append("Aucune composition disponible pour ce médicament.").append("\n");
+        } else {
+            for (String item : composition) {
+                compositionText.append(item).append("\n");
+            }
+        }
 
-                if (composition.isEmpty()) {
-                    compositionText.append("aucune composition disponible pour ce médicament.").append("\n");
-                } else {
-
-                    for (String item : composition) {
-                        compositionText.append(item).append("\n");
-                    }
-
-
-                }
-                if (presentation.isEmpty()) {
-                    compositionText.append("aucune presentation disponible pour ce médicament.").append("\n");
-                } else {
-
-                    for (String item : presentation) {
-                        compositionText.append(item).append("\n");
-                    }
+        if (presentation.isEmpty()) {
+            compositionText.append("\n").append("Aucune presentation disponible pour ce médicament.").append("\n");
+        } else {
+            compositionText.append("\n").append("Présentation : ").append("\n");
+            for (String item : presentation) {
+                compositionText.append(item).append("\n");
+            }
 
 
                 }
@@ -215,4 +215,14 @@ public class MainActivity extends AppCompatActivity {
         dialog.show();
     }
 
+    public void info(View v) {
+        Intent infoIntent = new Intent(this, Information.class);
+        startActivity(infoIntent);
+
+    }
+    public void GeneriquePage(View v) {
+        Intent generIntent = new Intent(this, GeneriqueSearch.class);
+        startActivity(generIntent);
+
+    }
 }

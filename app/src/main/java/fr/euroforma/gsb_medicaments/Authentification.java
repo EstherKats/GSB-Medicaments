@@ -16,13 +16,20 @@ import android.widget.TextView;
 import android.widget.Toast;
 
 import java.security.SecureRandom;
+import java.text.DateFormat;
+import java.text.SimpleDateFormat;
+import java.util.Calendar;
+import java.util.Date;
 
 public class Authentification extends AppCompatActivity {
 
     private static final String PREF_NAME = "UserPrefs";
     private static final String KEY_USER_STATUS = "userStatus";
     private static final String SECURETOKEN = "BethElicheva5";
-    private EditText codeVisiteur,  saisieCode;
+
+    private EditText codeVisiteur,  saisieCode, NomVisiteur, PrenomVisiteur;
+    private static final String NOM = "nom";
+    private static final String PRENOM = "prenom";
 
     private Button buttonValider, buttonOK;
     private String secureKey;
@@ -37,7 +44,8 @@ public class Authentification extends AppCompatActivity {
         setContentView(R.layout.activity_authentification);
         setUserStatus("KO");
 
-
+        NomVisiteur = findViewById(R.id.NomVisiteur);
+        PrenomVisiteur = findViewById(R.id.PrenomVisiteur);
         codeVisiteur = findViewById(R.id.codeVisiteur);
         buttonValider = findViewById(R.id.buttonValider);
         saisieCode = findViewById(R.id.saisieCode);
@@ -51,15 +59,13 @@ public class Authentification extends AppCompatActivity {
 
     String codeV = codeVisiteur.getText().toString();
 
-    // Vous pouvez maintenant utiliser la méthode sendKeyByEmail
-    // avec le codeV, secureKey, et token comme paramètres
-
-
+    /*
+     Vous pouvez maintenant utiliser la méthode sendKeyByEmail
+     avec le codeV, secureKey, et token comme paramètres */
     secureKey = generateRandomCode();
 
-    String token = SECURETOKEN;
+        String token = SECURETOKEN;
     SendKeyTask sendEmail = new SendKeyTask(getApplicationContext());
-
     sendEmail.execute(codeV, secureKey, token);
 
     }
@@ -74,6 +80,9 @@ public class Authentification extends AppCompatActivity {
             //Log.d("COMPARE", "OK");
             Toast toast = Toast.makeText(this,"Authentification réussie", Toast.LENGTH_LONG);
             toast.show();
+            String nom = NomVisiteur.getText().toString();
+            String prenom = PrenomVisiteur.getText().toString();
+            setNomPrenom(nom, prenom);
             Intent authIntent = new Intent(this, MainActivity.class);
             startActivity(authIntent);
             finish();
@@ -84,11 +93,25 @@ public class Authentification extends AppCompatActivity {
         }
     }
     private void setUserStatus(String status) {
+        Date currentTime = Calendar.getInstance().getTime();
+        DateFormat dateFormat = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");
+        String strDate = dateFormat.format(currentTime);
         SharedPreferences sharedPreferences = getSharedPreferences(PREF_NAME, MODE_PRIVATE);
         SharedPreferences.Editor editor = sharedPreferences.edit();
         editor.putString(KEY_USER_STATUS, status);
+        editor.putString("TIME", strDate);
         editor.apply();
     }
+
+    private void setNomPrenom(String nom, String prenom) {
+        SharedPreferences sharedPreferences = getSharedPreferences(PREF_NAME, MODE_PRIVATE);
+        SharedPreferences.Editor editor = sharedPreferences.edit();
+        editor.putString(NOM, nom);
+        editor.putString(PRENOM, prenom);
+        editor.apply();
+    }
+
+
 
     private String generateRandomCode() {
         // Caractères possibles dans le code

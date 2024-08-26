@@ -12,10 +12,32 @@
 
     <ImageView
         android:id="@+id/imageView2"
-        android:layout_width="match_parent"
-        android:layout_height="135dp"
+        android:layout_width="586dp"
+        android:layout_height="270dp"
+        android:layout_gravity="center"
         android:paddingBottom="20dp"
         app:srcCompat="@drawable/logo" />
+
+
+    <EditText
+        android:id="@+id/NomVisiteur"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_gravity="center"
+        android:ems="10"
+        android:hint="Nom"
+        android:inputType="text"
+        android:paddingTop="30dp"/>
+
+    <EditText
+        android:id="@+id/PrenomVisiteur"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_gravity="center"
+        android:ems="10"
+        android:hint="Prenom"
+        android:inputType="text"
+        android:paddingTop="30dp"/>
 
     <EditText
         android:id="@+id/codeVisiteur"
@@ -35,7 +57,8 @@
         android:layout_height="wrap_content"
         android:layout_gravity="center"
         android:onClick="clickValider"
-        android:text="OK" />
+        android:text="OK"
+        android:backgroundTint="#7399c9"/>
 
 
     <LinearLayout
@@ -64,7 +87,8 @@
             android:layout_height="wrap_content"
             android:layout_marginStart="161dp"
             android:onClick="clickOk"
-            android:text="OK" />
+            android:text="OK"
+            android:backgroundTint="#7399c9"/>
 
 
     </LinearLayout>
@@ -75,6 +99,7 @@
         android:layout_height="wrap_content"
         android:layout_gravity="center"
         android:onClick="clickQuitter"
-        android:text="Quitter" />
+        android:text="Quitter"
+        android:backgroundTint="#7399c9"/>
 
 </LinearLayout>
